@@ -10,7 +10,7 @@ COPY ./main.go ./main.go
 # Download any dependencies
 RUN go mod init example.com/main
 
-# Download any dependencies
+# Add the required dependencies
 RUN go mod tidy
 
 # Compile the program
