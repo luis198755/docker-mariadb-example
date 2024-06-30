@@ -1,0 +1,44 @@
+services:
+
+  mariadb:
+    image: mariadb:11.5.1-rc
+    container_name: mariadb_container
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: ecommerce
+      MARIADB_USER: user
+      MARIADB_PASSWORD: password
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+
+  adminer:
+    image: adminer:4.8.1-standalone
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
+  goapi:
+    build:
+      context: ./go-api
+      dockerfile: Dockerfile
+    container_name: goapi
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mariadb
+    networks:
+      - mynetwork
+
+volumes:
+  mariadb_data:
+
+networks:
+  mynetwork:
+
